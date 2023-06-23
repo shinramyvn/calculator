@@ -35,6 +35,8 @@ let finalValue = 0;
 
 const display = document.querySelector('.display');
 
+const decimalButton = document.querySelector('.decimalButton');
+
 const calculatorButtons = document.querySelectorAll('.calculator-button');
 calculatorButtons.forEach((calculatorButton) => {
     calculatorButton.addEventListener('click', () => {
@@ -71,13 +73,25 @@ calculatorButtons.forEach((calculatorButton) => {
                 } else {
                     numberA.push(calculatorButton.id);
                     display.innerHTML = arrayToNum(numberA);
+                    if (calculatorButton.id === '.') {
+                        if (numberA[0] === '.' || numberA[0] === '-' && numberA[1] === '.') {
+                            numberA.unshift(0);
+                        }
+                        display.innerHTML = arrayToNum(numberA) +'.';
+                        decimalButton.disabled = true;
+                    }
                 }
         } else if ( //operator 
             calculatorButton.id === '+' ||
             calculatorButton.id === '-' ||
             calculatorButton.id === '*' ||
             calculatorButton.id === '/') {
-                if (numberB.length != 0) { //instead of pressing = we want to do more numbers
+                decimalButton.disabled = false;
+                if (numberA.length === 0) {
+                    alert("You haven't inputed anything yet!");
+                    clear();
+                    display.innerHTML = "";
+                } else if (numberB.length != 0) { //instead of pressing = we want to do more numbers
                     b = arrayToNum(numberB);
                     finalValue = operate(a,sign,b);
                     display.innerHTML = Math.round((finalValue + Number.EPSILON) * 1000) / 1000;
@@ -121,12 +135,20 @@ calculatorButtons.forEach((calculatorButton) => {
             } else {
                 numberB.push(calculatorButton.id);
                 display.innerHTML = arrayToNum(numberB);
+                if (calculatorButton.id === '.') {
+                    if (numberB[0] === '.' || numberB[0] === '-' && numberB[1] === '.') {
+                        numberB.unshift(0);
+                    }
+                    display.innerHTML = arrayToNum(numberB) +'.';
+                    decimalButton.disabled = true;
+
+                }
             }
         } else if (calculatorButton.id === '='){ // after equal sign
+            decimalButton.disabled = false;
             if (sign === '/' && numberB[0] === '0') { //if user tries to divide by 0
                 clear()
-                display.innerHTML = "";
-                alert("You can't divide by 0. Try again.")
+                display.innerHTML = "Error";
             } else if (numberB.length === 0){ //if user didn't complete operation
                 clear()
                 display.innerHTML = "";
@@ -148,7 +170,7 @@ calculatorButtons.forEach((calculatorButton) => {
 });
 
 function arrayToNum(array) {
-    return parseInt(array.join(""));
+    return parseFloat(array.join(""));
 }
 
 function del(array) {
@@ -166,4 +188,5 @@ function clear() {
     numberA = [];
     numberB = [];
     sign = '+';
+    decimalButton.disabled = false;
 }

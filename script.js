@@ -33,11 +33,13 @@ let b = 0;
 let sign = '+';
 let finalValue = 0;
 
+const display = document.querySelector('.display');
+
 const calculatorButtons = document.querySelectorAll('.calculator-button');
 calculatorButtons.forEach((calculatorButton) => {
     calculatorButton.addEventListener('click', () => {
         if ( // if there is no value in a and number
-            a === 0 && calculatorButton.id === '0' ||
+            a === 0 && calculatorButton.id === 'zero' ||
             a === 0 && calculatorButton.id === '1' ||
             a === 0 && calculatorButton.id === '2' ||
             a === 0 && calculatorButton.id === '3' ||
@@ -46,8 +48,18 @@ calculatorButtons.forEach((calculatorButton) => {
             a === 0 && calculatorButton.id === '6' ||
             a === 0 && calculatorButton.id === '7' ||
             a === 0 && calculatorButton.id === '8' ||
-            a === 0 && calculatorButton.id === '9') {
-            numberA.push(calculatorButton.id);
+            a === 0 && calculatorButton.id === '9' ||
+            a === 0 && calculatorButton.id === '.' ||
+            a === 0 && calculatorButton.id === 'delete') {
+                if (calculatorButton.id === 'zero') {
+                    numberA.push('0');
+                    display.innerHTML = arrayToNum(numberA);
+                } else if (calculatorButton.id === 'delete') {
+                    del(numberA);
+                } else {
+                    numberA.push(calculatorButton.id);
+                    display.innerHTML = arrayToNum(numberA);
+                }
         } else if ( //operator 
             calculatorButton.id === '+' ||
             calculatorButton.id === '-' ||
@@ -56,7 +68,7 @@ calculatorButtons.forEach((calculatorButton) => {
                 if (numberB.length != 0) { //instead of pressing = we want to do more numbers
                     b = arrayToNum(numberB);
                     finalValue = operate(a,sign,b);
-                    console.log(finalValue);
+                    display.innerHTML = Math.round((finalValue + Number.EPSILON) * 1000) / 1000;
                     clear();
                     a = finalValue;
                     sign = calculatorButton.id;
@@ -66,7 +78,7 @@ calculatorButtons.forEach((calculatorButton) => {
                 }
 
         } else if ( // if there is value in in a and number (value goes to b)
-            calculatorButton.id === '0' ||
+            calculatorButton.id === 'zero' ||
             calculatorButton.id === '1' ||
             calculatorButton.id === '2' ||
             calculatorButton.id === '3' ||
@@ -75,9 +87,19 @@ calculatorButtons.forEach((calculatorButton) => {
             calculatorButton.id === '6' ||
             calculatorButton.id === '7' ||
             calculatorButton.id === '8' ||
-            calculatorButton.id === '9'
-        ) {
-            numberB.push(calculatorButton.id);
+            calculatorButton.id === '9' ||
+            calculatorButton.id === '.' ||
+            calculatorButton.id === 'delete') {
+
+            if (calculatorButton.id === 'zero') {
+                numberB.push('0');
+                display.innerHTML = arrayToNum(numberB);
+            } else if (calculatorButton.id === 'delete') {
+                del(numberB);
+            } else {
+                numberB.push(calculatorButton.id);
+                display.innerHTML = arrayToNum(numberB);
+            }
         } else if (calculatorButton.id === '='){ // after equal sign
             if (sign === '/' && numberB[0] === '0') { //if user tries to divide by 0
                 clear()
@@ -88,13 +110,14 @@ calculatorButtons.forEach((calculatorButton) => {
             } else {
                 b = arrayToNum(numberB);
                 finalValue = operate(a,sign,b);
-                console.log(Math.round((finalValue + Number.EPSILON) * 1000) / 1000);
+                display.innerHTML = Math.round((finalValue + Number.EPSILON) * 1000) / 1000;
                 clear()
                 finalValue = 0;
             }
 
         } else if (calculatorButton.id === 'clear') { //wipe and start fresh
             clear()
+            display.innerHTML = "";
             finalValue = 0;
         }
     });
@@ -104,10 +127,20 @@ function arrayToNum(array) {
     return parseInt(array.join(""));
 }
 
+function del(array) {
+    array.pop();
+    if (array.length === 0) {
+        display.innerHTML = "";
+    } else {
+        display.innerHTML = arrayToNum(array);
+    }
+}
+
 function clear() {
     a = 0;
     b = 0;
     numberA = [];
     numberB = [];
     sign = '+';
+
 }

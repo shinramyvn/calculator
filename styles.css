@@ -1,3 +1,7 @@
+* {
+    font-family: 'Andale Mono', monospace;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -8,6 +12,7 @@
     border: 1px solid black;
     padding: 20px;
     border-radius: 10px;
+    background-color: rgb(98, 98, 98);
 }
 
 .sections {
@@ -19,11 +24,14 @@
 .calculator-button {
     padding: 10px;
     flex-basis: 100%;
-    color: black;
+    color: white;
     background: none;
     border: none;
     font-size: 24px;
+}
 
+.operators {
+    color: orange;
 }
 
 .calculator-button:hover {
@@ -36,12 +44,13 @@
 
 .display {
     height: 100px;
-    font-size: 28px;
-    border: 1px solid black;
+    font-size: 32px;
+    border: 3px solid white;
     width: 100%;
     display: flex;
     justify-content: end;
     align-items: center;
-    padding-right: 10px;
+    padding-right: 5px;
+    background-color: rgb(123, 137, 72);
 
 }

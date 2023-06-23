@@ -50,8 +50,20 @@ calculatorButtons.forEach((calculatorButton) => {
             a === 0 && calculatorButton.id === '8' ||
             a === 0 && calculatorButton.id === '9' ||
             a === 0 && calculatorButton.id === '.' ||
-            a === 0 && calculatorButton.id === 'delete') {
-                if (calculatorButton.id === 'zero') {
+            a === 0 && calculatorButton.id === 'delete' ||
+            a === 0 && calculatorButton.id === 'negative' ) {
+                if (calculatorButton.id === 'negative') {
+                    if (numberA[0] === '-') {
+                        delete numberA[0];
+                        display.innerHTML = arrayToNum(numberA);
+                    } else {
+                        numberA.unshift('-');
+                        if (numberA.length > 1) {
+                            display.innerHTML = arrayToNum(numberA);
+                        }
+                        
+                    }
+                } else if (calculatorButton.id === 'zero') {
                     numberA.push('0');
                     display.innerHTML = arrayToNum(numberA);
                 } else if (calculatorButton.id === 'delete') {
@@ -89,9 +101,19 @@ calculatorButtons.forEach((calculatorButton) => {
             calculatorButton.id === '8' ||
             calculatorButton.id === '9' ||
             calculatorButton.id === '.' ||
-            calculatorButton.id === 'delete') {
-
-            if (calculatorButton.id === 'zero') {
+            calculatorButton.id === 'delete' ||
+            calculatorButton.id === 'negative' ) {
+            if (calculatorButton.id === 'negative') {
+                if (numberB[0] === '-') {
+                    delete numberB[0];
+                    display.innerHTML = arrayToNum(numberB);
+                } else {
+                    numberB.unshift('-');
+                    if (numberB.length > 1) {
+                        display.innerHTML = arrayToNum(numberB);
+                    }                      
+                }
+            } else if (calculatorButton.id === 'zero') {
                 numberB.push('0');
                 display.innerHTML = arrayToNum(numberB);
             } else if (calculatorButton.id === 'delete') {
@@ -103,10 +125,12 @@ calculatorButtons.forEach((calculatorButton) => {
         } else if (calculatorButton.id === '='){ // after equal sign
             if (sign === '/' && numberB[0] === '0') { //if user tries to divide by 0
                 clear()
-                console.log("You can't divide by 0. Try again.")
+                display.innerHTML = "";
+                alert("You can't divide by 0. Try again.")
             } else if (numberB.length === 0){ //if user didn't complete operation
                 clear()
-                console.log("Complete the expression before pressing =. Try Again.")
+                display.innerHTML = "";
+                alert("Complete the expression before pressing =. Try Again.")
             } else {
                 b = arrayToNum(numberB);
                 finalValue = operate(a,sign,b);
@@ -142,5 +166,4 @@ function clear() {
     numberA = [];
     numberB = [];
     sign = '+';
-
 }
